@@ -10,12 +10,14 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/CorrectRoadH/CasaOS-Firewall/codegen"
+	codegen "github.com/CorrectRoadH/CasaOS-Firewall/codegen"
 	"github.com/CorrectRoadH/CasaOS-Firewall/pkg/config"
-	"github.com/CorrectRoadH/CasaOS-Firewall/pkg/utils/file"
+	v2 "github.com/CorrectRoadH/CasaOS-Firewall/route/v2"
 
-	v2Route "github.com/CorrectRoadH/CasaOS-Firewall/route/v2"
-	"github.com/IceWhaleTech/CasaOS-Common/external"
+	// "github.com/CorrectRoadH/CasaOS-Firewall/pkg/utils/file"
+
+	external "github.com/IceWhaleTech/CasaOS-Common/external"
+	"github.com/IceWhaleTech/CasaOS-Common/utils/file"
 	"github.com/IceWhaleTech/CasaOS-Common/utils/jwt"
 	"github.com/deepmap/oapi-codegen/pkg/middleware"
 	"github.com/getkin/kin-openapi/openapi3"
@@ -53,7 +55,7 @@ func init() {
 }
 
 func InitV2Router() http.Handler {
-	appManagement := v2Route.NewCasaOS()
+	firewall := v2.NewFirewall()
 
 	e := echo.New()
 
@@ -118,7 +120,7 @@ func InitV2Router() http.Handler {
 		Options: openapi3filter.Options{AuthenticationFunc: openapi3filter.NoopAuthenticationFunc},
 	}))
 
-	codegen.RegisterHandlersWithBaseURL(e, appManagement, V2APIPath)
+	codegen.RegisterHandlersWithBaseURL(e, firewall, V2APIPath)
 
 	return e
 }

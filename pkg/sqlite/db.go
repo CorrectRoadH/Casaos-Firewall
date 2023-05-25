@@ -8,8 +8,6 @@ import (
 	"github.com/IceWhaleTech/CasaOS-Common/utils/file"
 	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"
-
-	"github.com/CorrectRoadH/CasaOS-Firewall/service/model"
 )
 
 type ContextKey string
@@ -120,9 +118,9 @@ func GetDBByFile(dbFile string) *gorm.DB {
 	c.SetMaxOpenConns(1)
 	c.SetConnMaxIdleTime(time.Second * 1000)
 
-	if err := db.AutoMigrate(&model.Merge{}, &model.Volume{}); err != nil {
-		panic(err)
-	}
+	// if err := db.AutoMigrate(&model.Merge{}, &model.Volume{}); err != nil {
+	// 	panic(err)
+	// }
 
 	if err := initializeHooks(db); err != nil {
 		panic(err)
