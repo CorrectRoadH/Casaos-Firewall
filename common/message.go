@@ -2,12 +2,9 @@ package common
 
 import (
 	"fmt"
-	"strconv"
-	"strings"
 	"time"
 
 	"github.com/CorrectRoadH/CasaOS-Firewall/codegen/message_bus"
-	"github.com/CorrectRoadH/CasaOS-Firewall/model"
 	"github.com/pilebones/go-udev/netlink"
 )
 
@@ -93,31 +90,31 @@ func EventAdapter(e netlink.UEvent) *message_bus.Event {
 	}
 }
 
-func AdditionalProperties(v model.LSBLKModel) map[string]string {
-	properties := make(map[string]string)
-	properties["size"] = strconv.FormatUint(v.Size, 10)
-	properties["model"] = v.Model
-	properties["path"] = v.Path
-	properties["serial"] = v.Serial
-	properties["uuid"] = v.UUID
-	properties["children:num"] = strconv.Itoa(len(v.Children))
-	properties["tran"] = v.Tran
-	mountPoint := []string{}
-	var avail int64 = 0
-	for i := 0; i < len(v.Children); i++ {
-		a, err := v.Children[i].FSAvail.Int64()
-		if err == nil {
-			avail += a
-		}
-		mountPoint = append(mountPoint, v.Children[i].MountPoint)
-		properties["children:"+strconv.Itoa(i)+":fstype"] = v.Children[i].FsType
-		properties["children:"+strconv.Itoa(i)+":path"] = v.Children[i].Path
-		properties["children:"+strconv.Itoa(i)+":size"] = string(v.Children[i].FSSize)
-		properties["children:"+strconv.Itoa(i)+":avail"] = string(v.Children[i].FSAvail)
-	}
-	properties["avail"] = strconv.FormatInt(avail, 10)
+// func AdditionalProperties(v model.LSBLKModel) map[string]string {
+// 	properties := make(map[string]string)
+// 	properties["size"] = strconv.FormatUint(v.Size, 10)
+// 	properties["model"] = v.Model
+// 	properties["path"] = v.Path
+// 	properties["serial"] = v.Serial
+// 	properties["uuid"] = v.UUID
+// 	properties["children:num"] = strconv.Itoa(len(v.Children))
+// 	properties["tran"] = v.Tran
+// 	mountPoint := []string{}
+// 	var avail int64 = 0
+// 	for i := 0; i < len(v.Children); i++ {
+// 		a, err := v.Children[i].FSAvail.Int64()
+// 		if err == nil {
+// 			avail += a
+// 		}
+// 		mountPoint = append(mountPoint, v.Children[i].MountPoint)
+// 		properties["children:"+strconv.Itoa(i)+":fstype"] = v.Children[i].FsType
+// 		properties["children:"+strconv.Itoa(i)+":path"] = v.Children[i].Path
+// 		properties["children:"+strconv.Itoa(i)+":size"] = string(v.Children[i].FSSize)
+// 		properties["children:"+strconv.Itoa(i)+":avail"] = string(v.Children[i].FSAvail)
+// 	}
+// 	properties["avail"] = strconv.FormatInt(avail, 10)
 
-	properties["mount_point"] = strings.Join(mountPoint, ",")
+// 	properties["mount_point"] = strings.Join(mountPoint, ",")
 
-	return properties
-}
+// 	return properties
+// }

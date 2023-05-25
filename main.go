@@ -8,12 +8,17 @@ import (
 	_ "embed"
 	"flag"
 	"fmt"
+	"net"
 	"os"
 
 	"github.com/CorrectRoadH/CasaOS-Firewall/common"
 	"github.com/CorrectRoadH/CasaOS-Firewall/pkg/config"
 	"github.com/CorrectRoadH/CasaOS-Firewall/pkg/sqlite"
+	"github.com/CorrectRoadH/CasaOS-Firewall/route"
+	"github.com/CorrectRoadH/CasaOS-Firewall/service"
+	"github.com/IceWhaleTech/CasaOS-Common/model"
 	"github.com/IceWhaleTech/CasaOS-Common/utils/logger"
+	"github.com/robfig/cron/v3"
 )
 
 const localhost = "127.0.0.1"
@@ -54,5 +59,36 @@ func init() {
 func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
+	// sendStorageStats()
+
+	crontab := cron.New(cron.WithSeconds())
+	// if _, err := crontab.AddFunc("@every 5s", sendStorageStats); err != nil {
+	// 	logger.Error("crontab add func error", zap.Error(err))
+	// }
+
+	crontab.Start()
+	defer crontab.Stop()
+
+	listener, err := net.Listen("tcp", net.JoinHostPort(localhost, "0"))
+	if err != nil {
+		panic(err)
+	}
+
+	// register at gateway
+	apiPaths := []string{
+		route.V2APIPath,
+		route.V2DocPath,
+	}
+
+	for _, apiPath := range apiPaths {
+		err = service.MyService.Gateway().CreateRoute(&model.Route{
+			Path:   apiPath,
+			Target: "http://" + listener.Addr().String(),
+		})
+
+		if err != nil {
+			panic(err)
+		}
+	}
 
 }
