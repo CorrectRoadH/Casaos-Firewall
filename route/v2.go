@@ -1,24 +1,19 @@
 package route
 
 import (
-	"crypto/ecdsa"
 	"log"
 	"net/http"
 	"net/url"
 	"path"
 	"path/filepath"
-	"strconv"
 	"strings"
 
 	codegen "github.com/CorrectRoadH/CasaOS-Firewall/codegen"
-	"github.com/CorrectRoadH/CasaOS-Firewall/pkg/config"
 	v2 "github.com/CorrectRoadH/CasaOS-Firewall/route/v2"
 
 	// "github.com/CorrectRoadH/CasaOS-Firewall/pkg/utils/file"
 
-	external "github.com/IceWhaleTech/CasaOS-Common/external"
 	"github.com/IceWhaleTech/CasaOS-Common/utils/file"
-	"github.com/IceWhaleTech/CasaOS-Common/utils/jwt"
 	"github.com/deepmap/oapi-codegen/pkg/middleware"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3filter"
@@ -78,15 +73,15 @@ func InitV2Router() http.Handler {
 			//return true
 
 		},
-		ParseTokenFunc: func(token string, c echo.Context) (interface{}, error) {
-			valid, claims, err := jwt.Validate(token, func() (*ecdsa.PublicKey, error) { return external.GetPublicKey(config.CommonInfo.RuntimePath) })
-			if err != nil || !valid {
-				return nil, echo.ErrUnauthorized
-			}
-			c.Request().Header.Set("user_id", strconv.Itoa(claims.ID))
+		// ParseTokenFunc: func(token string, c echo.Context) (interface{}, error) {
+		// 	valid, claims, err := jwt.Validate(token, func() (*ecdsa.PublicKey, error) { return external.GetPublicKey(config.CommonInfo.RuntimePath) })
+		// 	if err != nil || !valid {
+		// 		return nil, echo.ErrUnauthorized
+		// 	}
+		// 	c.Request().Header.Set("user_id", strconv.Itoa(claims.ID))
 
-			return claims, nil
-		},
+		// 	return claims, nil
+		// },
 		TokenLookupFuncs: []echo_middleware.ValuesExtractor{
 			func(c echo.Context) ([]string, error) {
 				return []string{c.Request().Header.Get(echo.HeaderAuthorization)}, nil
