@@ -1,4 +1,4 @@
-//go:generate bash -c "mkdir -p codegen && go run github.com/deepmap/oapi-codegen/cmd/oapi-codegen@v1.12.4 -generate types,server,spec -package codegen api/local_storage/openapi.yaml > codegen/local_storage_api.go"
+//go:generate bash -c "mkdir -p codegen && go run github.com/deepmap/oapi-codegen/cmd/oapi-codegen@v1.12.4 -generate types,server,spec -package codegen api/firewall/openapi.yaml > codegen/local_storage_api.go"
 //go:generate bash -c "mkdir -p codegen/message_bus && go run github.com/deepmap/oapi-codegen/cmd/oapi-codegen@v1.12.4 -generate types,client -package message_bus https://raw.githubusercontent.com/IceWhaleTech/CasaOS-MessageBus/main/api/message_bus/openapi.yaml > codegen/message_bus/api.go"
 
 package main
@@ -9,11 +9,17 @@ import (
 	"flag"
 	"fmt"
 	"net"
+	"net/http"
 	"os"
+	"time"
 
 	"github.com/CorrectRoadH/CasaOS-Firewall/common"
 	"github.com/CorrectRoadH/CasaOS-Firewall/pkg/config"
 	"github.com/CorrectRoadH/CasaOS-Firewall/pkg/sqlite"
+	util_http "github.com/IceWhaleTech/CasaOS-Common/utils/http"
+	"github.com/samber/lo"
+	"go.uber.org/zap"
+
 	"github.com/CorrectRoadH/CasaOS-Firewall/route"
 	"github.com/CorrectRoadH/CasaOS-Firewall/service"
 	"github.com/IceWhaleTech/CasaOS-Common/model"
@@ -26,6 +32,12 @@ const localhost = "127.0.0.1"
 var (
 	commit = "private build"
 	date   = "private build"
+
+	//go:embed api/index.html
+	_docHTML string
+
+	//go:embed api/firewall/openapi.yaml
+	_docYAML string
 )
 
 func init() {
@@ -89,6 +101,37 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
+	}
+
+	for devtype, eventTypesByAction := range common.EventTypes {
+		response, err := service.MyService.MessageBus().RegisterEventTypesWithResponse(ctx, lo.Values(eventTypesByAction))
+		if err != nil {
+			logger.Error("error when trying to register one or more event types - some event type will not be discoverable", zap.Error(err), zap.String("devtype", devtype))
+		}
+
+		if response != nil && response.StatusCode() != http.StatusOK {
+			logger.Error("error when trying to register one or more event types - some event type will not be discoverable", zap.String("status", response.Status()), zap.String("body", string(response.Body)), zap.String("devtype", devtype))
+		}
+	}
+
+	v2Router := route.InitV2Router()
+	v2DocRouter := route.InitV2DocRouter(_docHTML, _docYAML)
+
+	mux := &util_http.HandlerMultiplexer{
+		HandlerMap: map[string]http.Handler{
+			"v2":  v2Router,
+			"doc": v2DocRouter,
+		},
+	}
+
+	server := &http.Server{
+		Handler:           mux,
+		ReadHeaderTimeout: 5 * time.Second,
+	}
+
+	err = server.Serve(listener)
+	if err != nil {
+		panic(err)
 	}
 
 }
