@@ -6,6 +6,7 @@ import (
 	"net/url"
 	"path"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	codegen "github.com/CorrectRoadH/CasaOS-Firewall/codegen"
@@ -13,7 +14,9 @@ import (
 
 	// "github.com/CorrectRoadH/CasaOS-Firewall/pkg/utils/file"
 
+	"github.com/IceWhaleTech/CasaOS-Common/utils/common_err"
 	"github.com/IceWhaleTech/CasaOS-Common/utils/file"
+	"github.com/IceWhaleTech/CasaOS-Common/utils/jwt"
 	"github.com/deepmap/oapi-codegen/pkg/middleware"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3filter"
@@ -70,18 +73,21 @@ func InitV2Router() http.Handler {
 	e.Use(echo_middleware.JWTWithConfig(echo_middleware.JWTConfig{
 		Skipper: func(c echo.Context) bool {
 			return c.RealIP() == "::1" || c.RealIP() == "127.0.0.1"
-			//return true
-
 		},
-		// ParseTokenFunc: func(token string, c echo.Context) (interface{}, error) {
-		// 	valid, claims, err := jwt.Validate(token, func() (*ecdsa.PublicKey, error) { return external.GetPublicKey(config.CommonInfo.RuntimePath) })
-		// 	if err != nil || !valid {
-		// 		return nil, echo.ErrUnauthorized
-		// 	}
-		// 	c.Request().Header.Set("user_id", strconv.Itoa(claims.ID))
+		ParseTokenFunc: func(token string, c echo.Context) (interface{}, error) {
+			claims, code := jwt.Validate(token)
+			if code != common_err.SUCCESS {
+				return nil, echo.ErrUnauthorized
+			}
+			// valid, claims, err := jwt.Validate(token, func() (*ecdsa.PublicKey, error) { return external.GetPublicKey(config.CommonInfo.RuntimePath) })
+			// if err != nil || !valid {
+			// 	return nil, echo.ErrUnauthorized
+			// }
 
-		// 	return claims, nil
-		// },
+			c.Request().Header.Set("user_id", strconv.Itoa(claims.ID))
+
+			return claims, nil
+		},
 		TokenLookupFuncs: []echo_middleware.ValuesExtractor{
 			func(c echo.Context) ([]string, error) {
 				return []string{c.Request().Header.Get(echo.HeaderAuthorization)}, nil
