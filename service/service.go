@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/CorrectRoadH/CasaOS-Firewall/codegen/message_bus"
 	"github.com/CorrectRoadH/CasaOS-Firewall/pkg/config"
+	v2 "github.com/CorrectRoadH/CasaOS-Firewall/service/v2"
 	"github.com/IceWhaleTech/CasaOS-Common/external"
 	"github.com/patrickmn/go-cache"
 	"gorm.io/gorm"
@@ -15,6 +16,7 @@ var MyService Services
 type Services interface {
 	// NftablesService() NftablesService
 	Gateway() external.ManagementService
+	Firewall() *v2.FirewallService
 	MessageBus() *message_bus.ClientWithResponses
 }
 
@@ -28,16 +30,22 @@ func NewService(db *gorm.DB) Services {
 	// sharesService := external.NewShareService(config.CommonInfo.RuntimePath)
 
 	return &store{
-		gateway: gatewayManagement,
+		firewall: v2.NewFirewallService(db),
+		gateway:  gatewayManagement,
 	}
 }
 
 type store struct {
-	gateway external.ManagementService
+	gateway  external.ManagementService
+	firewall *v2.FirewallService
 }
 
 func (c *store) Gateway() external.ManagementService {
 	return c.gateway
+}
+
+func (c *store) Firewall() *v2.FirewallService {
+	return c.firewall
 }
 
 type NftablesService interface {

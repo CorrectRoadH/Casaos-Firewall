@@ -15,6 +15,9 @@ import (
 
 	"github.com/CorrectRoadH/CasaOS-Firewall/common"
 	"github.com/CorrectRoadH/CasaOS-Firewall/pkg/config"
+	"github.com/CorrectRoadH/CasaOS-Firewall/pkg/sqlite"
+	"github.com/IceWhaleTech/CasaOS-Firewall/pkg/cache"
+
 	util_http "github.com/IceWhaleTech/CasaOS-Common/utils/http"
 	"github.com/samber/lo"
 	"go.uber.org/zap"
@@ -63,7 +66,9 @@ func init() {
 		*dbFlag = config.AppInfo.DBPath
 	}
 
-	// sqliteDB := sqlite.GetGlobalDB(*dbFlag)
+	sqliteDB := sqlite.GetGlobalDB(*dbFlag)
+	service.MyService = service.NewService(sqliteDB)
+	service.Cache = cache.Init()
 
 }
 
