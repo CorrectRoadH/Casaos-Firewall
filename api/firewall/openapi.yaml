@@ -55,6 +55,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/ChangePortResponseOK"
+        "403":
+          $ref: "#/components/responses/ResponseBadRequest"
         "503":
           $ref: "#/components/responses/ResponseServiceUnavailable"
   /nftables/version:
@@ -119,6 +121,16 @@ components:
                   data:
                     type: string
                     example: "success"  
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            readOnly: true
+            allOf:
+              - $ref: "#/components/schemas/BaseResponse"
+          example:
+            message: "Bad Request"
     ResponseServiceUnavailable:
       description: Service Unavailable
       content:

@@ -26,8 +26,23 @@ type BaseResponse struct {
 	Message *string `json:"message,omitempty"`
 }
 
+// Port defines model for Port.
+type Port struct {
+	Action   *string `json:"action,omitempty"`
+	Port     *string `json:"port,omitempty"`
+	Protocol *string `json:"protocol,omitempty"`
+}
+
 // Rule defines model for Rule.
 type Rule = string
+
+// ChangePortResponseOK defines model for ChangePortResponseOK.
+type ChangePortResponseOK struct {
+	Data *string `json:"data,omitempty"`
+
+	// Message message returned by server side if there is any
+	Message *string `json:"message,omitempty"`
+}
 
 // GetRulesResponseOK defines model for GetRulesResponseOK.
 type GetRulesResponseOK struct {
@@ -45,14 +60,23 @@ type GetVersionResponseOK struct {
 	Message *string `json:"message,omitempty"`
 }
 
+// ResponseBadRequest defines model for ResponseBadRequest.
+type ResponseBadRequest = BaseResponse
+
 // ResponseServiceUnavailable defines model for ResponseServiceUnavailable.
 type ResponseServiceUnavailable = BaseResponse
+
+// OpenOrClosePortJSONRequestBody defines body for OpenOrClosePort for application/json ContentType.
+type OpenOrClosePortJSONRequestBody = Port
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 	// Get Rules
 	// (GET /nftables)
 	GetRules(ctx echo.Context) error
+	// Open or Close a Port
+	// (POST /nftables)
+	OpenOrClosePort(ctx echo.Context) error
 	// Get Version
 	// (GET /nftables/version)
 	GetVersion(ctx echo.Context) error
@@ -71,6 +95,17 @@ func (w *ServerInterfaceWrapper) GetRules(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.GetRules(ctx)
+	return err
+}
+
+// OpenOrClosePort converts echo context to params.
+func (w *ServerInterfaceWrapper) OpenOrClosePort(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(Access_tokenScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.OpenOrClosePort(ctx)
 	return err
 }
 
@@ -114,6 +149,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	}
 
 	router.GET(baseURL+"/nftables", wrapper.GetRules)
+	router.POST(baseURL+"/nftables", wrapper.OpenOrClosePort)
 	router.GET(baseURL+"/nftables/version", wrapper.GetVersion)
 
 }
@@ -121,19 +157,22 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
+	"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",
+	"tgfDuGn/CwAA//9SMPUdYA0AAA==",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

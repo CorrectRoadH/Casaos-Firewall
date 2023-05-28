@@ -22,3 +22,9 @@ func (s *FirewallService) ExecGetNftablesShell() string {
 	}
 	return result
 }
+
+func (s *FirewallService) OpenOrClosePort(Port *string, Action *string) error {
+	if _, err := command2.OnlyExec("source " + config.AppInfo.ShellPath + "/firewall-helper.sh ;SetNftablesRules"); err != nil {
+		logger.Error("error when executing shell script to set nftables rules", zap.Error(err))
+	}
+}

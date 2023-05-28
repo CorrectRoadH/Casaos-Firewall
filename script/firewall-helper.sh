@@ -21,6 +21,8 @@ GetSysInfo() {
 
 NftablesInit(){
   AddNftablesTable filter
+  AddNftablesCahin filter input
+  AllowOtherPort filter input
 }
 
 AddNftablesTable(){
@@ -41,6 +43,11 @@ ClosePort(){
 OpenPort(){
   # $1 表示表名 $2 表示链名 $3 表示端口号
   $sudo_cmd nft add rule inet $1 $2 tcp dport $3 accept
+}
+
+AllowOtherPort(){
+  # $1 表示表名 $2 表示链名 
+  $sudo_cmd nft add rule rult $1 $2 accept
 }
 
 GetNftablesVersion(){
