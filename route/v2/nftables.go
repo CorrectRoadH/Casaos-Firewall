@@ -24,7 +24,7 @@ func (s *Firewall) OpenOrClosePort(ctx echo.Context) error {
 		message := err.Error()
 		return ctx.JSON(http.StatusBadRequest, codegen.ResponseBadRequest{Message: &message})
 	}
-	err := service.MyService.Firewall().OpenOrClosePort(request.Port, request.Action)
+	err := service.MyService.Firewall().OpenOrClosePort(request.Port, request.Action, request.Protocol)
 	if err != nil {
 		message := err.Error()
 		return ctx.JSON(http.StatusBadRequest, codegen.ResponseBadRequest{Message: &message})

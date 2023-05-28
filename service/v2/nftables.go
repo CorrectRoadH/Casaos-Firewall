@@ -25,14 +25,14 @@ func (s *FirewallService) ExecGetNftablesShell() string {
 	return result
 }
 
-func (s *FirewallService) OpenOrClosePort(Port *string, Action *string) error {
+func (s *FirewallService) OpenOrClosePort(Port *string, Action *string, Protocol *string) error {
 	if strings.Compare(*Action, "open") == 0 {
-		if _, err := command2.OnlyExec("source " + config.AppInfo.ShellPath + "/firewall-helper.sh ;OpenPort"); err != nil {
+		if _, err := command2.OnlyExec("source " + config.AppInfo.ShellPath + "/firewall-helper.sh ;OpenPort " + *Port + " " + *Protocol); err != nil {
 			logger.Error("error when executing shell script to set nftables rules", zap.Error(err))
 		}
 
 	} else {
-		if _, err := command2.OnlyExec("source " + config.AppInfo.ShellPath + "/firewall-helper.sh ;ClosePort"); err != nil {
+		if _, err := command2.OnlyExec("source " + config.AppInfo.ShellPath + "/firewall-helper.sh ;ClosePort " + *Port + " " + *Protocol); err != nil {
 			logger.Error("error when executing shell script to set nftables rules", zap.Error(err))
 		}
 	}
