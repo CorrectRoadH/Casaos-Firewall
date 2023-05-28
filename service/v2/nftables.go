@@ -1,6 +1,8 @@
 package v2
 
 import (
+	"strings"
+
 	"github.com/CorrectRoadH/CasaOS-Firewall/pkg/config"
 	command2 "github.com/CorrectRoadH/CasaOS-Firewall/pkg/utils/command"
 	"github.com/IceWhaleTech/CasaOS-Common/utils/logger"
@@ -24,8 +26,15 @@ func (s *FirewallService) ExecGetNftablesShell() string {
 }
 
 func (s *FirewallService) OpenOrClosePort(Port *string, Action *string) error {
-	if _, err := command2.OnlyExec("source " + config.AppInfo.ShellPath + "/firewall-helper.sh ;SetNftablesRules"); err != nil {
-		logger.Error("error when executing shell script to set nftables rules", zap.Error(err))
+	if strings.Compare(*Action, "open") == 0 {
+		if _, err := command2.OnlyExec("source " + config.AppInfo.ShellPath + "/firewall-helper.sh ;OpenPort"); err != nil {
+			logger.Error("error when executing shell script to set nftables rules", zap.Error(err))
+		}
+
+	} else {
+		if _, err := command2.OnlyExec("source " + config.AppInfo.ShellPath + "/firewall-helper.sh ;ClosePort"); err != nil {
+			logger.Error("error when executing shell script to set nftables rules", zap.Error(err))
+		}
 	}
 	return nil
 }
