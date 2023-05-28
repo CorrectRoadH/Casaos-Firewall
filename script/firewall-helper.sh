@@ -24,7 +24,7 @@ GetNftablesVersion(){
 }
 
 GetNftablesRuleset(){
-    nft list ruleset
+    $sudo_cmd nft list ruleset
 }
 
 AddNftablesSet(){

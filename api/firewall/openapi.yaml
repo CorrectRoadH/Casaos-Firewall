@@ -40,6 +40,20 @@ paths:
           $ref: "#/components/responses/GetRulesResponseOK"
         "503":
           $ref: "#/components/responses/ResponseServiceUnavailable"
+  /nftables/version:
+    get:
+      summary: Get Version
+      description: |-
+        (TODO)
+      operationId: getVersion
+      tags:
+        - Nftable methods
+      responses:
+        "200":
+          $ref: "#/components/responses/GetVersionResponseOK"
+        "503":
+          $ref: "#/components/responses/ResponseServiceUnavailable"
+
 
 components:
   securitySchemes:
@@ -63,6 +77,19 @@ components:
                     type: array
                     items:
                       $ref: "#/components/schemas/Rule"
+    GetVersionResponseOK:
+      description: OK
+      content:
+        application/json:
+          schema:
+            readOnly: true
+            allOf:
+              - $ref: "#/components/schemas/BaseResponse"
+              - type: object
+                properties:
+                  data:
+                    type: string
+                    example: "0.9.0"  
     ResponseServiceUnavailable:
       description: Service Unavailable
       content:

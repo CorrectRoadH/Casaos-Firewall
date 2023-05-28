@@ -37,6 +37,14 @@ type GetRulesResponseOK struct {
 	Message *string `json:"message,omitempty"`
 }
 
+// GetVersionResponseOK defines model for GetVersionResponseOK.
+type GetVersionResponseOK struct {
+	Data *string `json:"data,omitempty"`
+
+	// Message message returned by server side if there is any
+	Message *string `json:"message,omitempty"`
+}
+
 // ResponseServiceUnavailable defines model for ResponseServiceUnavailable.
 type ResponseServiceUnavailable = BaseResponse
 
@@ -45,6 +53,9 @@ type ServerInterface interface {
 	// Get Rules
 	// (GET /nftables)
 	GetRules(ctx echo.Context) error
+	// Get Version
+	// (GET /nftables/version)
+	GetVersion(ctx echo.Context) error
 }
 
 // ServerInterfaceWrapper converts echo contexts to parameters.
@@ -60,6 +71,17 @@ func (w *ServerInterfaceWrapper) GetRules(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.GetRules(ctx)
+	return err
+}
+
+// GetVersion converts echo context to params.
+func (w *ServerInterfaceWrapper) GetVersion(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(Access_tokenScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetVersion(ctx)
 	return err
 }
 
@@ -92,25 +114,26 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	}
 
 	router.GET(baseURL+"/nftables", wrapper.GetRules)
+	router.GET(baseURL+"/nftables/version", wrapper.GetVersion)
 
 }
 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"H4sIAAAAAAAC/7xU32sbRxD+V5ZpHxI464RNoRzkIW1pMC5ViVP6YBkx2hvdbbK3u8zsyVbF/e9l986y",
-	"LadqaGmepJ2Z++abX98etO+Cd+SiQLUHJgneCeXHO4rve0vyfjIurpJVexfJxfQXQ7BGYzTelR/Fu2QT",
-	"3VKH2WvtYgPVzR6+ZdpABd+Uj8nKMU7KH1DoIQEMxR4C+0AczcihxpjBTKQuG05hJbYwFBB3gaACZMYd",
-	"DI8Gv/5IOsJwWwAT1gtnd1BF7mlIQTWJZhNSNVDB4iohPTC7Jt4aTb873KKxuLb0Ba2ge+zCGNmRCDaJ",
-	"w4SknkINxX9s25cU9NnEh8y5t89Aq+NRHGrYHyFPDsUUe3ZUq/VOCfGWWImpSZmNii0xKSMK3Q6Kx84A",
-	"HDM/DEsiG9dAriQPttq/cBUgpHs2cXedqhh5otYksor+E+UxmMSxJayJoQCHXYJ428fWs/kzTwweVyaY",
-	"K9qNSY3b+JfFLvv5/EIHo2PPlB+0dEopNTrE96xJdVQbfLOEV4FpQyxn2lvPZ7nXVKka+dPrJShhLRTf",
-	"LKGNMUhVlox3s8bEtl/3Qjzt10z7rrzU9EeLlj6QbkvrG192aFypUdDL9LNao3PEqwS/cqZp4+r7+Tzc",
-	"z4JrlvBvydoE9D+yjXcmp1itbU+nCZuuUWgThR9RcHE9kvr6jEY25bMtSEtkYl7qkZz62TDdobXq7W+X",
-	"UMCWWMYd2p6nk/eBHAYDFVzM5rMLKCBgbPMKl24T04HmR0Px5Rq++rD4afEaMgrnJb6soTpIdj6rJ1J+",
-	"Pp//nXge4srP6P1QwHfzi3/+9IRO5ivtuw55NxJUDwwjNgLVDfw6Fqs6iq2vBW6Hp5edpfD5Td/cJsUb",
-	"JUayv2cLFZTb83IzNT2L4pThuHm/+LszS1t6mMykCRMPORBJEPdnEZt37PswIh3FnizjdvgrAAD//64y",
-	"TDNgBwAA",
+	"H4sIAAAAAAAC/8xV32/bNhD+V4jbHlpAsYQEAzYBfeg2LAgyzEPTbQ9xYJyps8SWIokj5cQz9L8PpBTF",
+	"sTt3a9FhTzZ/6Lvv++54twNpW2cNmeCh3AGTd9Z4SotLCm86Tf7NuDm/jrvSmkAmxL/onFYSg7Imf+et",
+	"iXteNtRiOtV6vobydgdfM62hhK/yp2D5cM/n36OnxwDQZztwbB1xUAOHCkMCU4HatHEKK7KFPoOwdQQl",
+	"IDNuoX/asKt3JAP0dxkwYTU3egtl4I76eKkiL1m5qAZKmF9HpEsKvxN7Zc3/wQR6wNbpqKSYfTcrYBLm",
+	"AytTf57Ux/g3xBsl6TeDG1QaVzHeRwVPzHbQkvdYRw4jktiH6rPPNOefCPpg4ClysvQZaHlo+KRhd4A8",
+	"Hgim0LGhSqy2whNviIVXFQm1FqEhJqG8QLOFbC9ncMj8OH0xDd1g43FmPcmOVdjeRBUDT5SSvF8G+55S",
+	"GlTk2BBWxJCBwTZCvO5CY1n9mTL2VDPo1DVth6DKrO2x2EVXFBfSKRk6prSghRFCiOHA244liZYqha8W",
+	"8MIxrYn9mbTa8lnymkpRIb9/uQDhWXoKrxbQhOB8meeM97NahaZbdZ54rK+ZtG1+JemPBjW9Jdnk2tY2",
+	"b1GZXKJH68ef5QqNIV5G+KVRdROW3xaFe5g5Uy/gU8nqCPQF2YZ7lUIsV7qj04RVWwvUkcIP6HF+M5D6",
+	"7xkNbPJnVRCLSIVU1AM58ZNiuketxetfryCDzdAzoYTNeXzy1pFBp6CEi1kxu4AMHIYmlXBu1iE+0LSo",
+	"KRyX4Yu38x/nLyGhcCriqwrKaTqlZ7U3tc6L4u/mxHQv/8Bo6zP4prj4+Kcn+mR6pV3bIm8HguKRYcDa",
+	"Q3kLvwxiRUuhsZWHu/jJZEE++favrRin1KeacTzkvogdTyxPGLLX6tJseN7kbu/iCBh6rk/nHWsoId+c",
+	"5+uxCtOUGCMcWvizvT/TtKHHUh2b5MjDT0QixMNZwPqSbecGpIO7J2Xc9X8FAAD//0uaSeBcCQAA",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file
