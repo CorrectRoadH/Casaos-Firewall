@@ -31,3 +31,8 @@ func (s *Firewall) OpenOrClosePort(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusOK, codegen.ChangePortResponseOK{})
 }
+
+func (s *Firewall) GetOpenedPorts(ctx echo.Context) error {
+	ports := service.MyService.Firewall().GetOpenedPorts()
+	return ctx.JSON(http.StatusOK, codegen.GetPortsResponseOK{Data: &ports})
+}

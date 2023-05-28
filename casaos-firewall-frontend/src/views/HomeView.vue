@@ -1,22 +1,33 @@
 <script setup lang="ts">
-import { onMounted, reactive } from 'vue';
-const portList = reactive([])
-const loadingState = reactive({
-  loading: false,
-  error: false,
-  errorMessage: ''
-})
+import {reactive } from 'vue';
+import { useQuery } from "@tanstack/vue-query";
 
-onMounted(async () => {
-  const response = await fetch('/ports')
-  const data = await response.json()
-  // portList.push(...data)
-})
+// const portList = reactive([])
+const getPort = async () => {
+  console.log("hello")
+  const res = await fetch('http://127.0.0.1/v2/firewall/port')
+  if(!res.ok){
+    throw new Error('Network response was not ok')
+  }
+  return res.json()
+}
+
+console.log(getPort())
+// const { isLoading, isFetching, isError, data, error } = useQuery({
+//   queryKey: ['todos'],
+//   queryFn: getPort,
+// })
+
 </script>
 
 <template>
   <main>
     <h1>Firewall</h1>
+    <div>
+      Port:
+      <input type="text" />
+      <button>Open</button>
+    </div>
     <table  class="table">
       <thead>
         <tr>

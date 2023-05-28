@@ -72,6 +72,20 @@ paths:
           $ref: "#/components/responses/GetVersionResponseOK"
         "503":
           $ref: "#/components/responses/ResponseServiceUnavailable"
+  /port:
+    get:
+      summary: Get Opened Ports
+      description: |-
+        (TODO)
+      operationId: getOpenedPorts
+      tags:
+        - Nftable methods
+      responses:
+        "200":
+          $ref: "#/components/responses/GetPortsResponseOK"
+        "503":
+          $ref: "#/components/responses/ResponseServiceUnavailable"
+
 
 components:
   securitySchemes:
@@ -121,6 +135,20 @@ components:
                   data:
                     type: string
                     example: "success"  
+    GetPortsResponseOK:
+      description: OK
+      content:
+        application/json:
+          schema:
+            readOnly: false
+            allOf:
+              - $ref: "#/components/schemas/BaseResponse"
+              - type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Port"
     ResponseBadRequest:
       description: Bad Request
       content:

@@ -13,8 +13,10 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@tanstack/vue-query": "^4.29.11",
     "pinia": "^2.0.36",
     "vue": "^3.3.2",
+    "vue-query": "^1.26.0",
     "vue-router": "^4.2.0"
   },
   "devDependencies": {
