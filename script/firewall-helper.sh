@@ -38,3 +38,6 @@ GetNftablesVersion(){
   $sudo_cmd firewall-cmd --version
 }
 
+GetFirewallOpenedPorts(){
+  $sudo_cmd firewall-cmd --list-ports
+}
