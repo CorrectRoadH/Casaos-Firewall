@@ -150,9 +150,6 @@ components:
         port:
           type: string
           example: "80"
-        protocol:
-          type: string
-          example: "tcp"
         action:
           type: string
           example: "open"
