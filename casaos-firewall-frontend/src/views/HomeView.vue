@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import {reactive } from 'vue';
-import { useQuery } from "@tanstack/vue-query";
+import {reactive, ref } from 'vue';
+import { useQuery } from "vue-query";
 import axios from 'axios';
 
 interface port{
@@ -13,27 +13,70 @@ const PortMetaData = {
   fromJson(object: any):port{
     return {
       port: object.port ? object.port : "error port",
-      protocol: object.protocol ? object.port : "error protocol",
+      protocol: object.protocol ? object.protocol : "error protocol",
       action: object.action ? object.port : "error action",
     }
   }
 }
 
+const baseHost = "http://127.0.0.1"
+
+
 const portList = reactive([])
 const getPort = async ():Promise<any> => {
-  console.log("hello")
-  const promise = axios.get('http://127.0.0.1/v2/firewall/port').then((res)=>{
-    return PortMetaData.fromJson(res.data)
+  const promise = axios.get(baseHost+'/v2/firewall/port').then((res)=>{
+    return res.data.data.map((item:any)=>PortMetaData.fromJson(item))
+  })
+  return promise
+}
+const openPort = async(port:string,protocol:string):Promise<any> => {
+  const promise = axios.post(baseHost+'/v2/firewall/nftables',{
+    port: port,
+    protocol: protocol,
+    action: "open"
   })
   return promise
 }
 
-// console.log(getPort())
-const { isLoading, isFetching, isError, data, error } = useQuery({
-  queryKey: ['getPort'],
-  queryFn: getPort,
-})
+const closePort = async(port:string,protocol:string):Promise<any> => {
+  const promise = axios.post(baseHost+'/v2/firewall/nftables',{
+    port: port,
+    protocol: protocol,
+    action: "close"
+  })
+  return promise
+}
 
+const handelSaveBtnClick = async ()=>{
+  console.log(portRef.value,protocolRef.value)
+  await openPort(portRef.value,protocolRef.value)
+  alert("success")
+}
+
+const handelCloseBtnClick = async (port:string,protocol:string)=>{
+  console.log(portRef.value,protocolRef.value)
+  await closePort(portRef.value,protocolRef.value)
+  alert("success")
+}
+
+const portRef = ref("8080")
+const protocolRef = ref("tcp")
+
+const { isLoading, isFetching, isError, data, error } = useQuery(
+  "getPort",
+  getPort
+)
+
+defineExpose({
+  isLoading,
+  isFetching,
+  isError,
+  data,
+  error,
+  portList,
+  portRef,
+  protocolRef,
+})
 </script>
 
 <template>
@@ -41,8 +84,13 @@ const { isLoading, isFetching, isError, data, error } = useQuery({
     <h1>Firewall</h1>
     <div>
       Port:
-      <input type="text" />
-      <button>Open</button>
+      <input v-model="portRef" type="text" />
+      <select v-model="protocolRef" name="protocol" id="protocol">
+        <option value="tcp">TCP</option>
+        <option value="udp">UDP</option>
+      </select>
+      
+      <button @click="handelSaveBtnClick">Open</button>
     </div>
     <div v-if="isLoading" >
       Loading...
@@ -56,25 +104,7 @@ const { isLoading, isFetching, isError, data, error } = useQuery({
           <tr>
             <th>Port</th>
             <th>State</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>443</td>
-            <td>Open</td>
-            <td>
-              <button>Close</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-  
-      <table  class="table">
-        <thead>
-          <tr>
-            <th>Port</th>
-            <th>State</th>
+            <th>Protocol</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -82,8 +112,9 @@ const { isLoading, isFetching, isError, data, error } = useQuery({
           <tr v-for="(item) in data" :key="item">
             <td>{{item.port}}</td>
             <td>Open</td>
+            <td>{{item.protocol}}</td>
             <td>
-              <button>Close</button>
+              <button @click="handelCloseBtnClick(item.port,item.protocol)">Close</button>
             </td>
           </tr>
         </tbody>
