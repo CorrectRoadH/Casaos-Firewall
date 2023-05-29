@@ -14,52 +14,32 @@ servers:
     - url: /v2/firewall
 
 tags:
-  - name: Nftables methods
+  - name: Firewall methods
     description: |-
       Low-level API
 
 x-tagGroups:
-  - name: Nftables
+  - name: Firewall
     tags:
-      - Nftable methods
+      - Firewall methods
 
 security:
   - access_token: []
 
 paths:
-  /nftables:
+  /firewall:
     get:
       summary: Get Rules
-      description: |-
-        (TODO)
+      description: 这里还没有想到做什么用的
       operationId: getRules
       tags:
-        - Nftable methods
+        - Firewall methods
       responses:
         "200":
           $ref: "#/components/responses/GetRulesResponseOK"
         "503":
           $ref: "#/components/responses/ResponseServiceUnavailable"
-    post:
-      summary: Open or Close a Port
-      description: |-
-        (TODO)
-      operationId: openOrClosePort
-      tags:
-        - Nftable methods
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Port"
-      responses:
-        "200":
-          $ref: "#/components/responses/ChangePortResponseOK"
-        "403":
-          $ref: "#/components/responses/ResponseBadRequest"
-        "503":
-          $ref: "#/components/responses/ResponseServiceUnavailable"
-  /nftables/version:
+  /version:
     get:
       summary: Get Version
       description: |-
@@ -79,13 +59,31 @@ paths:
         (TODO)
       operationId: getOpenedPorts
       tags:
-        - Nftable methods
+        - Firewall methods
       responses:
         "200":
           $ref: "#/components/responses/GetPortsResponseOK"
         "503":
           $ref: "#/components/responses/ResponseServiceUnavailable"
-
+    post:
+      summary: Open or Close a Port
+      description: |-
+        (TODO)
+      operationId: openOrClosePort
+      tags:
+        - Firewall methods
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Port"
+      responses:
+        "200":
+          $ref: "#/components/responses/ChangePortResponseOK"
+        "403":
+          $ref: "#/components/responses/ResponseBadRequest"
+        "503":
+          $ref: "#/components/responses/ResponseServiceUnavailable"
 
 components:
   securitySchemes:

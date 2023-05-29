@@ -1,0 +1,7 @@
+[app]
+RuntimeRootPath = runtime/
+LogPath = /var/log/casaos/
+DBPath     = /var/lib/casaos
+ShellPath  = /usr/share/casaos/shell
+UserDataPath = /var/lib/casaos/conf
+
