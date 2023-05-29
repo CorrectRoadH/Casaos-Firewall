@@ -54,8 +54,7 @@ const handelSaveBtnClick = async ()=>{
 }
 
 const handelCloseBtnClick = async (port:string,protocol:string)=>{
-  console.log(portRef.value,protocolRef.value)
-  await closePort(portRef.value,protocolRef.value)
+  await closePort(port,protocol)
   alert("success")
 }
 
