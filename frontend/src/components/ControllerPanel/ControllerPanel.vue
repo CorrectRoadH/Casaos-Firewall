@@ -3,19 +3,11 @@ import {onMounted, ref } from 'vue';
 import axios from 'axios';
 import CButton from '../kit/CButton.vue';
 import { useFirewallStore } from '../../stores/firewall';
+import PortEdit from './PortEdit.vue';
 
 
 const firewallState = useFirewallStore();
 const baseHost = "http://127.0.0.1"
-
-const openPort = async(port:string,protocol:string):Promise<any> => {
-  const promise = axios.post(baseHost+'/v2/firewall/port',{
-    port: port,
-    protocol: protocol,
-    action: "open"
-  })
-  return promise
-}
 
 const closePort = async(port:string,protocol:string):Promise<any> => {
   const promise = axios.post(baseHost+'/v2/firewall/nftables',{
@@ -26,26 +18,17 @@ const closePort = async(port:string,protocol:string):Promise<any> => {
   return promise
 }
 
-const handelSaveBtnClick = async ()=>{
-  await openPort(portRef.value,protocolRef.value)
-  alert("success")
-}
-
 const handelCloseBtnClick = async (port:string,protocol:string)=>{
   await closePort(port,protocol)
+  firewallState.getPort()
   alert("success")
 }
-
-const portRef = ref("8080")
-const protocolRef = ref("tcp")
 
 onMounted(()=>{
   firewallState.getPort()
 })
 
 defineExpose({
-  portRef,
-  protocolRef,
   firewallState
 })
 </script>
@@ -56,16 +39,7 @@ defineExpose({
     <div>
         <p>These ports that didn't list in below is prohibited by default.</p>
     </div>
-    <div class="input">
-      Port:
-      <input v-model="portRef" type="text" />
-      <select v-model="protocolRef" name="protocol" id="protocol">
-        <option value="tcp">TCP</option>
-        <option value="udp">UDP</option>
-      </select>
-      
-      <CButton @click="handelSaveBtnClick">Open</CButton>
-    </div>
+    <PortEdit/> 
     <!-- <div v-if="isLoading" >
       Loading...
     </div>

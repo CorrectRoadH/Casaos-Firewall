@@ -42,6 +42,6 @@ GetFirewallOpenedPorts(){
   $sudo_cmd firewall-cmd --list-ports
 }
 
-RoloadConfig(){
+ReloadConfig(){
   $sudo_cmd firewall-cmd --reload
 }

@@ -31,7 +31,7 @@ export const useFirewallStore = defineStore('firewall', {
       this.Ports = ports.data.map(PortMetaData.fromJson)
       console.log(this.Ports)
     },
-    async setPort(port: number,protocol: string, action: string) {
+    async setPort(port: string,protocol: string, action: string) {
       await axios.post(baseHost+'/v2/firewall/port', {
         port: port,
         protocol: protocol,

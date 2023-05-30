@@ -1,8 +1,17 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useFirewallStore } from '../../stores/firewall';
+import CButton from '../kit/CButton.vue';
+
+const firewallState = useFirewallStore();
 
 const portRef = ref("8080")
 const protocolRef = ref("tcp")
+const handelSaveBtnClick = async ()=>{
+  await firewallState.setPort(portRef.value,protocolRef.value,"open")
+  firewallState.getPort()
+  alert("success")
+}
 
 </script>
 
@@ -15,6 +24,6 @@ const protocolRef = ref("tcp")
           <option value="udp">UDP</option>
         </select>
         
-        <CButton>Open</CButton>
+        <CButton @click="handelSaveBtnClick">Open</CButton>
       </div>
 </template>
