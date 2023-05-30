@@ -3,15 +3,10 @@ import {reactive, ref } from 'vue';
 import { useQuery } from "vue-query";
 import axios from 'axios';
 import CButton from '../kit/CButton.vue';
-
-interface port{
-  port: string;
-  protocol: string;
-  action: string;
-}
+import { type Port } from '../../types';
 
 const PortMetaData = {
-  fromJson(object: any):port{
+  fromJson(object: any):Port{
     return {
       port: object.port ? object.port : "error port",
       protocol: object.protocol ? object.protocol : "error protocol",
