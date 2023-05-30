@@ -29,10 +29,15 @@ import AIArea from '../components/AIArea.vue';
 .main{
   width: 70%;
   height: 80%;
-  background: rgba(255, 255, 255, 0.3);
   border-radius: 25px;
   padding: 25px;
   margin: 25px;
   color: white;
+}
+.second{
+  margin: 25px;
+  padding: 25px;
+  height: 80%;
+  widows: 25%;
 }
 </style>

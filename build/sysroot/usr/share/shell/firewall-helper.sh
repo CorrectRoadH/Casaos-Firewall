@@ -26,12 +26,12 @@ GetSysInfo() {
 
 ClosePort(){
   # $1 表示端口号 $2 tcp udp
-  $sudo_cmd firewall-cmd --remove-port=$1/$2
+  $sudo_cmd firewall-cmd --permanent --remove-port=$1/$2
 }
 
 OpenPort(){
   # $1 表示端口号 $2 tcp udp
-  $sudo_cmd firewall-cmd --add-port=$1/$2
+  $sudo_cmd firewall-cmd --permanent --add-port=$1/$2
 }
 
 GetNftablesVersion(){

@@ -10,5 +10,11 @@ useQueryProvider();
   <RouterView />
 </template>
 
-<style scoped>
+<style >
+:root{
+  --backDropColor: rgba(90, 108, 124, 0.4);
+  --backDropBlur: none ;
+  --backDropBorderRadius: 10px;  
+}
+
 </style>

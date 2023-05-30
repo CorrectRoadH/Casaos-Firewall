@@ -2,6 +2,7 @@
 import {reactive, ref } from 'vue';
 import { useQuery } from "vue-query";
 import axios from 'axios';
+import CButton from './kit/CButton.vue';
 
 interface port{
   port: string;
@@ -30,7 +31,7 @@ const getPort = async ():Promise<any> => {
   return promise
 }
 const openPort = async(port:string,protocol:string):Promise<any> => {
-  const promise = axios.post(baseHost+'/v2/firewall/nftables',{
+  const promise = axios.post(baseHost+'/v2/firewall/port',{
     port: port,
     protocol: protocol,
     action: "open"
@@ -92,7 +93,7 @@ defineExpose({
         <option value="udp">UDP</option>
       </select>
       
-      <button @click="handelSaveBtnClick">Open</button>
+      <CButton @click="handelSaveBtnClick">Open</CButton>
     </div>
     <div v-if="isLoading" >
       Loading...
@@ -116,7 +117,7 @@ defineExpose({
             <td>Open</td>
             <td>{{item.protocol}}</td>
             <td>
-              <button @click="handelCloseBtnClick(item.port,item.protocol)">Close</button>
+              <CButton @click="handelCloseBtnClick(item.port,item.protocol)">Close</CButton>
             </td>
           </tr>
         </tbody>
@@ -131,11 +132,18 @@ defineExpose({
     color: white;
 }
 .controllerContainer{
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+
+  padding: 25px;
+
+  border-radius: var(--backDropBorderRadius);
+  background: var(--backDropColor);
+  backdrop-filter:var(--backDropBlur);
 }
 .input{
-    margin:auto;
 }
 .table{
     width: 100%;
@@ -143,5 +151,6 @@ defineExpose({
     margin: auto;
     margin-top: 20px;
     border-radius: 5px;
+    flex-grow: 2;
 }
 </style>
