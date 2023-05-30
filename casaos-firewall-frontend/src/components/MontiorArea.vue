@@ -2,7 +2,7 @@
 </script>
 <template>
     <main class="container">
-        Firewall Status: Running
+        Firewall Status: 🟢 Running
     </main>
 </template>
 <style scoped>

@@ -49,6 +49,7 @@ const closePort = async(port:string,protocol:string):Promise<any> => {
 }
 
 const handelSaveBtnClick = async ()=>{
+  console.log("hello")
   console.log(portRef.value,protocolRef.value)
   await openPort(portRef.value,protocolRef.value)
   alert("success")
