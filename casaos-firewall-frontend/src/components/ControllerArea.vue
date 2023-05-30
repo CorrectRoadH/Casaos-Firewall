@@ -81,7 +81,7 @@ defineExpose({
 </script>
 
 <template>
-  <main class="controllerContainer">
+  <main class="backgroundContainer">
     <h1 class="title">Firewall</h1>
     <div>
         <p>These ports that didn't list in below is prohibited by default.</p>
@@ -131,18 +131,6 @@ defineExpose({
 .title{
     font-size: 20px;
     color: white;
-}
-.controllerContainer{
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-
-  padding: 25px;
-
-  border-radius: var(--backDropBorderRadius);
-  background: var(--backDropColor);
-  backdrop-filter:var(--backDropBlur);
 }
 .input{
 }
