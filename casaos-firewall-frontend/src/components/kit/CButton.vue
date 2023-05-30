@@ -1,20 +1,7 @@
 <script setup lang="ts">
-// props is title and click
-import { defineProps, defineEmits } from 'vue';
-const props = defineProps({
-    click: {
-        type: Function,
-        required: true
-    }
-});
-const emits = defineEmits(['click']);
-
-const handleClick = () => {
-    emits.click();
-};
 </script>
 <template>
-    <button class="button" @click="handleClick"><slot></slot></button>
+    <button class="button" ><slot></slot></button>
 </template>
 <style scoped>
 .button{
