@@ -54,6 +54,7 @@ func (s *FirewallService) OpenOrClosePort(Port *string, Action *string, Protocol
 			logger.Error("error when executing shell script to set firewall rules", zap.Error(err))
 		}
 	}
+	s.ExecReloadConfigShell()
 	return nil
 }
 
@@ -63,4 +64,11 @@ func (s *FirewallService) ExecGetOpenedShell() string {
 		logger.Error("error when executing shell script to get opened ports", zap.Error(err))
 	}
 	return result
+}
+
+func (s *FirewallService) ExecReloadConfigShell() error {
+	if _, err := command2.OnlyExec("source " + config.AppInfo.ShellPath + "/firewall-helper.sh ;ReloadConfig"); err != nil {
+		logger.Error("error when executing shell script to reload config", zap.Error(err))
+	}
+	return nil
 }

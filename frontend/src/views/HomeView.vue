@@ -8,10 +8,10 @@ import {MonitorPanel} from '../components/MonitorPanel';
 <template>
   <main class="div">
     <div class="second">
-      <ControllerPanel />
+      <MonitorPanel />
     </div>
     <div class="main">
-      <MonitorPanel />
+      <ControllerPanel />
     </div>
     <div class="third">
       ai
