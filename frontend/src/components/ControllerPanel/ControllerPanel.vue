@@ -126,8 +126,6 @@ defineExpose({
     font-size: 20px;
     color: white;
 }
-.input{
-}
 .table{
     width: 100%;
     border-collapse: collapse;
