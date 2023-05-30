@@ -1,7 +1,7 @@
 ## What is Casaos-firewall
 The Project is firewall manage tool for Casaos.
 
-[](./img/screen.png)
+![](./img/screen.png)
 
 ## Installation
 run script
