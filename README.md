@@ -1,4 +1,14 @@
-获得nftables信息
-获得当前规则
-打开当前端口
-关闭当前端口
+## 
+The Project is firewall manage tool for Casaos.
+## Installation
+run script
+```shell
+sh xxxxxxx
+```
+
+## Update
+
+## Uninstall
+run script
+```shell
+```

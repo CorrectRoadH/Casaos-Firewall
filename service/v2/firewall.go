@@ -15,7 +15,7 @@ func (s *FirewallService) GetRules() string {
 }
 
 func (s *FirewallService) GetVersion() string {
-	return s.ExecGetNftablesShell()
+	return s.ExecGetFirewallShell()
 }
 
 func (s *FirewallService) GetOpenedPorts() []codegen.Port {
@@ -35,10 +35,10 @@ func (s *FirewallService) GetOpenedPorts() []codegen.Port {
 	return ports
 }
 
-func (s *FirewallService) ExecGetNftablesShell() string {
+func (s *FirewallService) ExecGetFirewallShell() string {
 	result, err := command2.ExecResultStr("source " + config.AppInfo.ShellPath + "/firewall-helper.sh ;GetNftablesVersion")
 	if err != nil {
-		logger.Error("error when executing shell script to get nftables version", zap.Error(err))
+		logger.Error("error when executing shell script to get firewall version", zap.Error(err))
 	}
 	return result
 }
@@ -46,12 +46,12 @@ func (s *FirewallService) ExecGetNftablesShell() string {
 func (s *FirewallService) OpenOrClosePort(Port *string, Action *string, Protocol *string) error {
 	if strings.Compare(*Action, "open") == 0 {
 		if _, err := command2.OnlyExec("source " + config.AppInfo.ShellPath + "/firewall-helper.sh ;OpenPort " + *Port + " " + *Protocol); err != nil {
-			logger.Error("error when executing shell script to set nftables rules", zap.Error(err))
+			logger.Error("error when executing shell script to set firewall rules", zap.Error(err))
 		}
 
 	} else {
 		if _, err := command2.OnlyExec("source " + config.AppInfo.ShellPath + "/firewall-helper.sh ;ClosePort " + *Port + " " + *Protocol); err != nil {
-			logger.Error("error when executing shell script to set nftables rules", zap.Error(err))
+			logger.Error("error when executing shell script to set firewall rules", zap.Error(err))
 		}
 	}
 	return nil
