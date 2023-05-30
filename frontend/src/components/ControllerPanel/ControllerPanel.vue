@@ -120,10 +120,6 @@ defineExpose({
   </main>
 </template>
 <style scoped>
-.title{
-    font-size: 20px;
-    color: white;
-}
 .table{
     width: 100%;
     border-collapse: collapse;

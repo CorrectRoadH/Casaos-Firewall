@@ -1,20 +1,24 @@
 <script setup lang="ts">
 import {ControllerPanel} from '../components/ControllerPanel';
 import {MonitorPanel} from '../components/MonitorPanel';
-
+import {SettingPanel} from '../components/SettingPanel';
 // 下面做个响应式的三栏布局
 </script>
 
 <template>
   <main class="div">
-    <div class="second">
-      <MonitorPanel />
+    <div class="side">
+      <div class="second">
+        <MonitorPanel />
+      </div>
+      <div class="third">
+        <SettingPanel />
+  
+      </div>
+  
     </div>
     <div class="main">
       <ControllerPanel />
-    </div>
-    <div class="third">
-      ai
     </div>
   </main>
 </template>
@@ -33,10 +37,18 @@ import {MonitorPanel} from '../components/MonitorPanel';
   margin: 25px;
   color: white;
 }
+.side{
+  width: 25%;
+  height: 80%;
+}
 .second{
   margin: 25px;
   padding: 25px;
-  height: 80%;
-  widows: 25%;
+  height: 55%;
+}
+.third{
+  margin: 25px;
+  padding: 25px;
+  height: 25%;
 }
 </style>

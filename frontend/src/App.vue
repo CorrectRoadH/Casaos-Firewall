@@ -28,6 +28,12 @@ useQueryProvider();
   border-radius: var(--backDropBorderRadius);
   background: var(--backDropColor);
   backdrop-filter:var(--backDropBlur);
+  color: white;
+}
+
+.title{
+  font-size: 20px;
+  color: white;
 }
 
 </style>

@@ -25,6 +25,8 @@ defineExpose({
 </script>
 <template>
     <main class="backgroundContainer">
+        <h1 class="title">Monitor</h1>
+
         <div v-if="data">
             Firewall Status: 🟢 Running
         </div>
