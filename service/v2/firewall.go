@@ -88,3 +88,10 @@ func (s *FirewallService) ExecGetFirewallStateShell() (string, error) {
 	}
 	return result, err
 }
+
+func (s *FirewallService) ExecInitFirewallShell() error {
+	if _, err := command2.OnlyExec("source " + config.AppInfo.ShellPath + "/firewall-helper.sh ;InitFirewall"); err != nil {
+		logger.Error("error when executing shell script to init firewall", zap.Error(err))
+	}
+	return nil
+}

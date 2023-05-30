@@ -68,6 +68,7 @@ func init() {
 
 	sqliteDB := sqlite.GetGlobalDB(*dbFlag)
 	service.MyService = service.NewService(sqliteDB)
+	service.MyService.Firewall().ExecInitFirewallShell() // to open 80 and 22 port for ssh and http
 	service.Cache = cache.Init()
 
 }

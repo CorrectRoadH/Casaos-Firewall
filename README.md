@@ -10,6 +10,8 @@ sh xxxxxxx
 ```
 
 ## Update
+```shell
+```
 
 ## Uninstall
 run script
@@ -30,4 +32,5 @@ pnpm run dev
 ```
 ## Release
 ```shell
+goreleaser build --rm-dist --snapshot -f .goreleaser.debug.yaml --id casaos-firewall-amd64 
 ```

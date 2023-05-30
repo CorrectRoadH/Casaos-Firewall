@@ -19,6 +19,15 @@ GetSysInfo() {
 
 ((EUID)) && sudo_cmd="sudo"
 
+
+InitFirewall(){
+  $sudo_cmd systemctl start firewalld
+  $sudo_cmd systemctl enable firewalld
+  OpenPort 80 tcp # casaos port
+  OpenPort 443 tcp # casaos port
+  OpenPort 22 tcp # ssh port
+}
+
 GetFirewallState(){
   $sudo_cmd firewall-cmd --state 
   # result may be `running` and `not running`
