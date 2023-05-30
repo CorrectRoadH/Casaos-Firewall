@@ -28,12 +28,23 @@ export const useFirewallStore = defineStore('firewall', {
   actions: {
     async getPort() {
       const ports = (await axios.get(baseHost+'/v2/firewall/port')).data
-      this.Ports = ports.map(PortMetaData.fromJson)
+      this.Ports = ports.data.map(PortMetaData.fromJson)
+      console.log(this.Ports)
     },
-    async getFirewallState() {},
+    async setPort(port: number,protocol: string, action: string) {
+      await axios.post(baseHost+'/v2/firewall/port', {
+        port: port,
+        protocol: protocol,
+        action: action
+      })
+    },
+    async getFirewallState() {
+      const state = (await axios.get(baseHost+'/v2/firewall/firewall')).data
+      this.firewallState = state.data
+    },
     async getFirewallVersion() {
       const version = (await axios.get(baseHost+'/v2/firewall/version')).data
-      this.firewallVersion = version
+      this.firewallVersion = version.data
     }
   }
 })

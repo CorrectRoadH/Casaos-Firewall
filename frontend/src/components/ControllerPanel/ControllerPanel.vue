@@ -1,29 +1,13 @@
 <script setup lang="ts">
-import {reactive, ref } from 'vue';
-import { useQuery } from "vue-query";
+import {onMounted, ref } from 'vue';
 import axios from 'axios';
 import CButton from '../kit/CButton.vue';
-import { type Port } from '../../types';
+import { useFirewallStore } from '../../stores/firewall';
 
-const PortMetaData = {
-  fromJson(object: any):Port{
-    return {
-      port: object.port ? object.port : "error port",
-      protocol: object.protocol ? object.protocol : "error protocol",
-      action: object.action ? object.port : "error action",
-    }
-  }
-}
 
+const firewallState = useFirewallStore();
 const baseHost = "http://127.0.0.1"
 
-const portList = reactive([])
-const getPort = async ():Promise<any> => {
-  const promise = axios.get(baseHost+'/v2/firewall/port').then((res)=>{
-    return res.data.data.map((item:any)=>PortMetaData.fromJson(item))
-  })
-  return promise
-}
 const openPort = async(port:string,protocol:string):Promise<any> => {
   const promise = axios.post(baseHost+'/v2/firewall/port',{
     port: port,
@@ -55,20 +39,14 @@ const handelCloseBtnClick = async (port:string,protocol:string)=>{
 const portRef = ref("8080")
 const protocolRef = ref("tcp")
 
-const { isLoading, isFetching, isError, data, error } = useQuery(
-  "getPort",
-  getPort
-)
+onMounted(()=>{
+  firewallState.getPort()
+})
 
 defineExpose({
-  isLoading,
-  isFetching,
-  isError,
-  data,
-  error,
-  portList,
   portRef,
   protocolRef,
+  firewallState
 })
 </script>
 
@@ -88,13 +66,13 @@ defineExpose({
       
       <CButton @click="handelSaveBtnClick">Open</CButton>
     </div>
-    <div v-if="isLoading" >
+    <!-- <div v-if="isLoading" >
       Loading...
     </div>
     <div v-if="isError">
       Fetching Error
-    </div>
-    <div v-if="data">
+    </div> -->
+    <div v-if="firewallState.Ports">
       <table  class="table">
         <thead>
           <tr>
@@ -105,7 +83,7 @@ defineExpose({
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item) in data" :key="item">
+          <tr v-for="(item) in firewallState.Ports" :key="item.port">
             <td>{{item.port}}</td>
             <td>Open</td>
             <td>{{item.protocol}}</td>
