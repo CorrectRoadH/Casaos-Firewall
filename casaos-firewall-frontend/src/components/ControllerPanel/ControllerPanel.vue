@@ -2,7 +2,7 @@
 import {reactive, ref } from 'vue';
 import { useQuery } from "vue-query";
 import axios from 'axios';
-import CButton from './kit/CButton.vue';
+import CButton from '../kit/CButton.vue';
 
 interface port{
   port: string;

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import ControllerArea from '../components/ControllerArea.vue';
-import MontiorArea from '../components/MontiorArea.vue';
+import ControllerArea from '../components/ControllerPanel';
+import MontiorArea from '../components/MontiorPanel.vue';
 import AIArea from '../components/AIArea.vue';
 
 // 下面做个三栏布局
