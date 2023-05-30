@@ -18,8 +18,9 @@ run script
 
 # Development
 ## Backend
+Because casaos backend need root to execute some command. So air need sudo too.
 ```shell
-
+sudo air -c scripts/.air.toml   
 ```
 ## Frontend
 ```shell
