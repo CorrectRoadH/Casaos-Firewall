@@ -11,15 +11,11 @@ import (
 )
 
 func (s *FirewallService) GetFirewallState() bool {
-	state, err := s.ExecGetFirewallStateShell()
-	if err != nil {
-		logger.Error("error when executing shell script to get firewall state", zap.Error(err))
-	}
-	if strings.Contains(state, "not") {
+	_, err := s.ExecGetFirewallStateShell()
+	if err != nil { // because when firewall is not installed, it will return error not only a string
 		return false
-	} else {
-		return true
 	}
+	return true
 }
 
 func (s *FirewallService) GetVersion() string {
@@ -63,7 +59,7 @@ func (s *FirewallService) OpenOrClosePort(Port *string, Action *string, Protocol
 }
 
 func (s *FirewallService) ExecGetOpenedShell() string {
-	result, err := command2.ExecResultStr("source " + config.AppInfo.ShellPath + "/firewall-helper.sh ;GetFirewallOpenedPorts")
+	result, err := command2.ExecResultStr("source " + config.AppInfo.ShellPath + "/firewall-helper.sh ;GetFirewallOpenedPorts ")
 	if err != nil {
 		logger.Error("error when executing shell script to get opened ports", zap.Error(err))
 	}

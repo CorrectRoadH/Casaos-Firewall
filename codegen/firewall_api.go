@@ -51,7 +51,7 @@ type GetPortsResponseOK struct {
 
 // GetStateResponseOK defines model for GetStateResponseOK.
 type GetStateResponseOK struct {
-	Data *string `json:"data,omitempty"`
+	Data *bool `json:"data,omitempty"`
 
 	// Message message returned by server side if there is any
 	Message *string `json:"message,omitempty"`
@@ -59,7 +59,7 @@ type GetStateResponseOK struct {
 
 // GetVersionResponseOK defines model for GetVersionResponseOK.
 type GetVersionResponseOK struct {
-	Data *bool `json:"data,omitempty"`
+	Data *string `json:"data,omitempty"`
 
 	// Message message returned by server side if there is any
 	Message *string `json:"message,omitempty"`
@@ -177,23 +177,22 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"H4sIAAAAAAAC/8xX3W7cNhN9FWK+7yIBZGtht0AgIBexixqGi24Qp+2F11jMUrMSE4pkSWrt7ULvXpCS",
-	"9r/rn8SBr2yRwzNnDg/J2QVwXRmtSHkH2QIsOaOVo/hxXqIq6KO2/lM3PLwK41wrT8qHf9EYKTh6oVX6",
-	"xWkVxhwvqcI4K+VwCtnNAv5vaQoZ/C9dpUvbOJeeoaM+ATTJAozVhqwXLYscfQSje6yMJMjA1ZyTc5CA",
-	"n5s44K1QBTTNckRPvhD30NwmYAnzoZJzyLytqQlBOTluhQmsIYPhFTQJXJAPlbrXUKrwVMWBQ1iBLawq",
-	"RmtxvleCQyVfe/T0unbX1kqF3fzeu/snWSe0elXFBs7LqiZaS0L1bYX22c8w/0R/1+T8I8pc8llARc5h",
-	"EXKfYc56iCb5RikeU8BWwn7xNdmZ4PSHwhkKiZOW53Mq6pDYOtQPqWxv4mXmaI0N0GzbOMsaFlvI3QSz",
-	"5GurKGeTOXNkZ2SZEzkxMWW+JEtMOIZqDsnaQYNt5rsnrkkgXjM7hJC3BNYPrjakdk9tAqZDWEW+G+yN",
-	"s9prruVmrOfmMVdBUJN4bYWfXwdVe5rhoRh7/ZUiWRE0KwlzspCAwipAfKh9qa34JzpolQuNuKJ5K4JQ",
-	"U70r/qgeDE65EdzXluIHjRRjjLUTTteWE6soF/h+BG+MpSlZd8S11PYo7j1lLEf79e0ImLPckX8/gtJ7",
-	"47I0tXh3XAhf1pPake38fsx1lV5y+qtESZ+Jl6nUhU4rFCrl6FC77s94gkqRHQf4sRJF6cfvBgNzf2xU",
-	"MYLnkpUB6AXZ+jsRU4wnsqbDhEVVMJSBwjk6HF63pH48o5ZNuuGCYCLho31bcuxXYekOpWQfPl5CArP2",
-	"LYIMZifB+uHooBGQwenx4PgUEjDoy2jhdNotDR8F+V0bXpBnfRBz4UGHiGijoS/zNuS6m9jo8E4Gg/9q",
-	"M5Zx6Z42oUng58Hpw0sP3OHxxNZVhXbe1dAz9Fg4yG5gqVlFvtS5g9uwJu2vk71avPk8/GX4dl/9Q0OK",
-	"8tjiPVeF7f7wRVRoebKe6AExws3qHq9BAB7ac6ldbOmjCPGxPdP5/Em90MNdabw0n67x3h8cTQI/PUXl",
-	"tc7nu29Q0JBpy6KKDFkn5AOOXZ72J5u261mfa9jdlvdFLLti2Qvx+9SH2HUd1h7o2GFtPs03t6GRajsX",
-	"F+drKyGDdHayugBDSJdhW8Lf9N2RpBn1F2z3tO9sSIC4P/JYXFhdmxZpK/bwft42/wYAAP//qGr/8zMP",
-	"AAA=",
+	"H4sIAAAAAAAC/8xXXW/bNhT9K8TdHlpAsYSkBQoBfWgyLAgyzEXTbQ9xYFxT1xJbieRIyoln6L8PpCR/",
+	"1/loU+QpEXl57rmHh+T1AriqtJIknYV0AYasVtJS+DgrUOb0URn3qRseXvpxrqQj6fy/qHUpODqhZPzF",
+	"KunHLC+owjBblsMppNcL+NXQFFL4JV6li9s4G5+ipT4BNNECtFGajBMtiwxdAKM7rHRJkIKtOSdrIQI3",
+	"12HAGSFzaJrliJp8Ie6guYnAEGZDWc4hdaamxgdlZLkR2rOGFIaX0ERwTs5Xal9CqcJRFQYOYXm2sKoY",
+	"jcH5XgkOlXzl0NGL2l2/ScsaJkqVhPK7d/ZvMlYo+bJsnAzeDN7+WBP3+U8x+0T/1mTdAwpdMlpARdZi",
+	"7nOfYsZ6iCb6TjEeUsBWwn7xFZmZ4PSXxBmKEictz6dU1CGxdaifUtnexMvMwRwboOm2dZY1LLaQuwlm",
+	"yNVGUsYmc2bJzMgwKzJiYspcQYaYsAzlHKI198E2810jNhGES2aHEPKWwLqblSa5a+YIdIewinyX7I0z",
+	"yimuys1Yx/VDTohXk3hthJtfeVV7mv6ZGDv1lQJZ4TUrCDMyEIHEykN8qF2hjPgvOGiVC7W4pHkrgpBT",
+	"tSv+qE6SE64Fd7Wh8EEjyRhj7YRVteHEKsoEvh/BK21oSsYecVUqcxT2nlKWofn6egTMGm7JvR9B4Zy2",
+	"aRwbvB3kwhX1pLZkOr8PuKriC07/FFjSZ+JFXKpcxRUKGXO0qGz3ZzxBKcmMPfxYirxw43dJou8GWuYj",
+	"eCrZ0gM9I1t3K0KK8aSs6TBhUeUMS0/hDC0Or1pSP59RyybecIE3kXDBvi059rswdItlyT58vIAIZu1r",
+	"BCnMjr31/dFBLSCFk0EyOIEINLoiWDiedkv9R05u14bn5FgfxKx/ziEgmmDoi6wNueomNvq74yT5VpOx",
+	"jIv3NAlNBG+Tk/uXHrjDw4mtqwrNvKuhZ+gwt5Bew1KzilyhMgs3fk3cXyd7tXj1efjb8PW++oeaJGWh",
+	"wXuqCtvd4bOo0PJkPdEDYvib1T5cAw88NGelsqGhDyKEx/ZUZfNHdUP396Th0ny8xnt/bjQRvHmMymud",
+	"zw/fIK8hU4YFFRmyTsh7HLs87Y82bde1PtWwu03vs1h2xbIX4s+p87HrOqw90KHD2nyar298I9V2LjbM",
+	"16aEFOLZ8eoC9CFdhm0J/1C3RyXNqL9gu6d9Z0M8xN2Rw/zcqFq3SFuxh/fzpvk/AAD//210eJwxDwAA",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

@@ -104,8 +104,8 @@ components:
               - type: object
                 properties:
                   data:
-                    type: string
-                    example: "running"  
+                    type: boolean
+                    example: true  
     GetVersionResponseOK:
       description: OK
       content:
@@ -117,8 +117,8 @@ components:
               - type: object
                 properties:
                   data:
-                    type: boolean
-                    example: true 
+                    type: string
+                    example: "0.4.5" 
     ChangePortResponseOK:
       description: OK
       content:
