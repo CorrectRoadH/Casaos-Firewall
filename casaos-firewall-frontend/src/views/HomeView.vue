@@ -1,21 +1,20 @@
 <script setup lang="ts">
-import ControllerArea from '../components/ControllerPanel';
-import MontiorArea from '../components/MontiorPanel.vue';
-import AIArea from '../components/AIArea.vue';
+import {ControllerPanel} from '../components/ControllerPanel';
+import {MonitorPanel} from '../components/MonitorPanel';
 
-// 下面做个三栏布局
+// 下面做个响应式的三栏布局
 </script>
 
 <template>
   <main class="div">
     <div class="second">
-      <MontiorArea />
+      <ControllerPanel />
     </div>
     <div class="main">
-      <ControllerArea />
+      <MonitorPanel />
     </div>
     <div class="third">
-      <AIArea />
+      ai
     </div>
   </main>
 </template>

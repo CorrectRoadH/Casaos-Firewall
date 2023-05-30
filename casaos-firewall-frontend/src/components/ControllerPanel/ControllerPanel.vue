@@ -17,7 +17,6 @@ const PortMetaData = {
 
 const baseHost = "http://127.0.0.1"
 
-
 const portList = reactive([])
 const getPort = async ():Promise<any> => {
   const promise = axios.get(baseHost+'/v2/firewall/port').then((res)=>{
