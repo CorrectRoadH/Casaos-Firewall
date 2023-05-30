@@ -9,8 +9,9 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (s *Firewall) GetRules(ctx echo.Context) error {
-	return ctx.JSON(http.StatusOK, codegen.GetRulesResponseOK{})
+func (s *Firewall) GetState(ctx echo.Context) error {
+	state := service.MyService.Firewall().GetFirewallState()
+	return ctx.JSON(http.StatusOK, codegen.GetStateResponseOK{Data: &state})
 }
 
 func (s *Firewall) GetVersion(ctx echo.Context) error {

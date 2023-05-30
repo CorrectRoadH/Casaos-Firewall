@@ -10,12 +10,24 @@ import (
 	"go.uber.org/zap"
 )
 
-func (s *FirewallService) GetRules() string {
-	return "Hello, World!"
+func (s *FirewallService) GetFirewallState() bool {
+	state, err := s.ExecGetFirewallStateShell()
+	if err != nil {
+		logger.Error("error when executing shell script to get firewall state", zap.Error(err))
+	}
+	if strings.Contains(state, "not") {
+		return false
+	} else {
+		return true
+	}
 }
 
 func (s *FirewallService) GetVersion() string {
-	return s.ExecGetFirewallShell()
+	version, err := s.ExecGetFirewallShell()
+	if err != nil {
+		logger.Error("error when executing shell script to get firewall version", zap.Error(err))
+	}
+	return version
 }
 
 func (s *FirewallService) GetOpenedPorts() []codegen.Port {
@@ -33,14 +45,6 @@ func (s *FirewallService) GetOpenedPorts() []codegen.Port {
 		}
 	}
 	return ports
-}
-
-func (s *FirewallService) ExecGetFirewallShell() string {
-	result, err := command2.ExecResultStr("source " + config.AppInfo.ShellPath + "/firewall-helper.sh ;GetNftablesVersion")
-	if err != nil {
-		logger.Error("error when executing shell script to get firewall version", zap.Error(err))
-	}
-	return result
 }
 
 func (s *FirewallService) OpenOrClosePort(Port *string, Action *string, Protocol *string) error {
@@ -71,4 +75,20 @@ func (s *FirewallService) ExecReloadConfigShell() error {
 		logger.Error("error when executing shell script to reload config", zap.Error(err))
 	}
 	return nil
+}
+
+func (s *FirewallService) ExecGetFirewallShell() (string, error) {
+	result, err := command2.ExecResultStr("source " + config.AppInfo.ShellPath + "/firewall-helper.sh ;GetNftablesVersion")
+	if err != nil {
+		logger.Error("error when executing shell script to get firewall version", zap.Error(err))
+	}
+	return result, err
+}
+
+func (s *FirewallService) ExecGetFirewallStateShell() (string, error) {
+	result, err := command2.ExecResultStr("source " + config.AppInfo.ShellPath + "/firewall-helper.sh ;GetFirewallState")
+	if err != nil {
+		logger.Error("error when executing shell script to get firewall state", zap.Error(err))
+	}
+	return result, err
 }

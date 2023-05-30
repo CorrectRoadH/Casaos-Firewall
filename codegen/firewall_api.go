@@ -33,9 +33,6 @@ type Port struct {
 	Protocol *string `json:"protocol,omitempty"`
 }
 
-// Rule defines model for Rule.
-type Rule = string
-
 // ChangePortResponseOK defines model for ChangePortResponseOK.
 type ChangePortResponseOK struct {
 	Data *string `json:"data,omitempty"`
@@ -52,9 +49,9 @@ type GetPortsResponseOK struct {
 	Message *string `json:"message,omitempty"`
 }
 
-// GetRulesResponseOK defines model for GetRulesResponseOK.
-type GetRulesResponseOK struct {
-	Data *[]Rule `json:"data,omitempty"`
+// GetStateResponseOK defines model for GetStateResponseOK.
+type GetStateResponseOK struct {
+	Data *string `json:"data,omitempty"`
 
 	// Message message returned by server side if there is any
 	Message *string `json:"message,omitempty"`
@@ -62,7 +59,7 @@ type GetRulesResponseOK struct {
 
 // GetVersionResponseOK defines model for GetVersionResponseOK.
 type GetVersionResponseOK struct {
-	Data *string `json:"data,omitempty"`
+	Data *bool `json:"data,omitempty"`
 
 	// Message message returned by server side if there is any
 	Message *string `json:"message,omitempty"`
@@ -79,9 +76,9 @@ type OpenOrClosePortJSONRequestBody = Port
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
-	// Get Rules
+	// Get State
 	// (GET /firewall)
-	GetRules(ctx echo.Context) error
+	GetState(ctx echo.Context) error
 	// Get Opened Ports
 	// (GET /port)
 	GetOpenedPorts(ctx echo.Context) error
@@ -98,14 +95,14 @@ type ServerInterfaceWrapper struct {
 	Handler ServerInterface
 }
 
-// GetRules converts echo context to params.
-func (w *ServerInterfaceWrapper) GetRules(ctx echo.Context) error {
+// GetState converts echo context to params.
+func (w *ServerInterfaceWrapper) GetState(ctx echo.Context) error {
 	var err error
 
 	ctx.Set(Access_tokenScopes, []string{""})
 
 	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.GetRules(ctx)
+	err = w.Handler.GetState(ctx)
 	return err
 }
 
@@ -170,7 +167,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 		Handler: si,
 	}
 
-	router.GET(baseURL+"/firewall", wrapper.GetRules)
+	router.GET(baseURL+"/firewall", wrapper.GetState)
 	router.GET(baseURL+"/port", wrapper.GetOpenedPorts)
 	router.POST(baseURL+"/port", wrapper.OpenOrClosePort)
 	router.GET(baseURL+"/version", wrapper.GetVersion)
@@ -180,24 +177,23 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"H4sIAAAAAAAC/9RXQW8bxRf/KqP3/x9aaeNdJSCVlXpogqiiIFwlBQ5xZI1nn3en3Z0ZZmadGGslEEgU",
-	"iSMHqLhw44jghDj0y7Rp+RZoZndtxzZOHJqqnJKdefPe7/3mN+89T4DJQkmBwhqIJ6DRKCkM+o+9jIoU",
-	"H0htD5vl7oFbZ1JYFNb9S5XKOaOWSxE+MlK4NcMyLKjfzfPuEOLjCfxf4xBi+F84CxfWdibcpQbbAFAF",
-	"E1BaKtSW1ygSar0zPKOFyhFiMCVjaAwEYMfKL1jNRQpVNV2Rg0fILFQnAWikSVfkY4itLrFyRgkaprly",
-	"qCGG7gFUAdxH6zI1b0Oq3GLhF9b5cmhhljHVmo5XUrAu5cMyx/9Oyg7tlVLe5NY/QW24FG+XxKPOe53o",
-	"9Qq8jb9Lk0P8rERjr5DoFNEECjSGpi72Lk1I66IK/iUZV0lgIWB7+Aj1iDP8WNAR5Tkd1Divk1Hjicy7",
-	"eiOZrQw8jezFccFpvCidaQ6TBc/NBtFoSy0wIYMxMahHqInhCRI+JDZDjYQbQsUYgjn1wSLyZSFWAfgC",
-	"tASIshrAvJqlQrEs5gBU42FmeSdaaaellUzmF20tU1d5IQH4shFPVpgaZKXmdnzk6G7xu97St/Ix+iy4",
-	"IzNDmqCGAAQtnIt7pc2k5p97ac1AUMUPcFyzw8VQLt9Kr4yiHaY4s6VG/4E9QQgh9YaRpWZICkw4vduD",
-	"W0rjELXZYjKXesuLAmOSUP34dg+I0cygvduDzFpl4jDU9LSTcpuVg9Kgbh5Ch8ki3Gf4aUZzfIgsC3OZ",
-	"yrCgXISMGipN86c/oEKg7jv3fcHTzPbvRJE66yiR9uC6YHPn6AbR2lPuQ/QHeYnrAfMiJTR3EPaood2j",
-	"GtSbR1SjCS+owImIW6/rGhz5gGs8pXlO7j3YhwBGdZuCGEbbTtTuTVHFIYadTtTZgQAUtZmXcDhsjrqP",
-	"FO2yDF89+/Gvb7579eyH899+Pv/p2/Ovfn/x5NcXXz59/ucXz/948vL7X14+/Rp8DO0lvp9APB0XfHWY",
-	"GxO3o+ifGvfULlwxa1QBvBvtXH50Tbn3b7gsCqrHNUDSIrQ0NRAfw5TFAm0mEwMn7kzYVp6V7Nx62H2/",
-	"e3tV/l2FAhM/J16XhcUh80ZYqHGSFugaMlwRNlfnwDnu6r1cGv+7wJPg+/KuTMYbDU6Xj7a+jG7O8cpf",
-	"LVUA72zC8tyQ9NovyHFIpCaeRUJJQ+Qlip2+/41F2wy41xXs8nx8I5KdoWyJ+Ghone08D3Mt2w9jF5v1",
-	"8Ymbueohx/j9UucQQzjanpVEZ9JEWKTwQ3m6leMI25LbNPulC3EuzrYsTe9rWara04Lt+vs8qf4OAAD/",
-	"/7qS0bJ4DwAA",
+	"H4sIAAAAAAAC/8xX3W7cNhN9FWK+7yIBZGtht0AgIBexixqGi24Qp+2F11jMUrMSE4pkSWrt7ULvXpCS",
+	"9r/rn8SBr2yRwzNnDg/J2QVwXRmtSHkH2QIsOaOVo/hxXqIq6KO2/lM3PLwK41wrT8qHf9EYKTh6oVX6",
+	"xWkVxhwvqcI4K+VwCtnNAv5vaQoZ/C9dpUvbOJeeoaM+ATTJAozVhqwXLYscfQSje6yMJMjA1ZyTc5CA",
+	"n5s44K1QBTTNckRPvhD30NwmYAnzoZJzyLytqQlBOTluhQmsIYPhFTQJXJAPlbrXUKrwVMWBQ1iBLawq",
+	"RmtxvleCQyVfe/T0unbX1kqF3fzeu/snWSe0elXFBs7LqiZaS0L1bYX22c8w/0R/1+T8I8pc8llARc5h",
+	"EXKfYc56iCb5RikeU8BWwn7xNdmZ4PSHwhkKiZOW53Mq6pDYOtQPqWxv4mXmaI0N0GzbOMsaFlvI3QSz",
+	"5GurKGeTOXNkZ2SZEzkxMWW+JEtMOIZqDsnaQYNt5rsnrkkgXjM7hJC3BNYPrjakdk9tAqZDWEW+G+yN",
+	"s9prruVmrOfmMVdBUJN4bYWfXwdVe5rhoRh7/ZUiWRE0KwlzspCAwipAfKh9qa34JzpolQuNuKJ5K4JQ",
+	"U70r/qgeDE65EdzXluIHjRRjjLUTTteWE6soF/h+BG+MpSlZd8S11PYo7j1lLEf79e0ImLPckX8/gtJ7",
+	"47I0tXh3XAhf1pPake38fsx1lV5y+qtESZ+Jl6nUhU4rFCrl6FC77s94gkqRHQf4sRJF6cfvBgNzf2xU",
+	"MYLnkpUB6AXZ+jsRU4wnsqbDhEVVMJSBwjk6HF63pH48o5ZNuuGCYCLho31bcuxXYekOpWQfPl5CArP2",
+	"LYIMZifB+uHooBGQwenx4PgUEjDoy2jhdNotDR8F+V0bXpBnfRBz4UGHiGijoS/zNuS6m9jo8E4Gg/9q",
+	"M5Zx6Z42oUng58Hpw0sP3OHxxNZVhXbe1dAz9Fg4yG5gqVlFvtS5g9uwJu2vk71avPk8/GX4dl/9Q0OK",
+	"8tjiPVeF7f7wRVRoebKe6AExws3qHq9BAB7ac6ldbOmjCPGxPdP5/Em90MNdabw0n67x3h8cTQI/PUXl",
+	"tc7nu29Q0JBpy6KKDFkn5AOOXZ72J5u261mfa9jdlvdFLLti2Qvx+9SH2HUd1h7o2GFtPs03t6GRajsX",
+	"F+drKyGDdHayugBDSJdhW8Lf9N2RpBn1F2z3tO9sSIC4P/JYXFhdmxZpK/bwft42/wYAAP//qGr/8zMP",
+	"AAA=",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

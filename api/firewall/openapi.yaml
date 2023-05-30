@@ -29,14 +29,14 @@ security:
 paths:
   /firewall:
     get:
-      summary: Get Rules
-      description: 这里还没有想到做什么用的
-      operationId: getRules
+      summary: Get State
+      description: Get firewall state
+      operationId: getState
       tags:
         - Firewall methods
       responses:
         "200":
-          $ref: "#/components/responses/GetRulesResponseOK"
+          $ref: "#/components/responses/GetStateResponseOK"
         "503":
           $ref: "#/components/responses/ResponseServiceUnavailable"
   /version:
@@ -93,21 +93,7 @@ components:
       name: Authorization
 
   responses:
-    GetRulesResponseOK:
-      description: OK
-      content:
-        application/json:
-          schema:
-            readOnly: true
-            allOf:
-              - $ref: "#/components/schemas/BaseResponse"
-              - type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/Rule"
-    GetVersionResponseOK:
+    GetStateResponseOK:
       description: OK
       content:
         application/json:
@@ -119,7 +105,20 @@ components:
                 properties:
                   data:
                     type: string
-                    example: "0.9.0"  
+                    example: "running"  
+    GetVersionResponseOK:
+      description: OK
+      content:
+        application/json:
+          schema:
+            readOnly: true
+            allOf:
+              - $ref: "#/components/schemas/BaseResponse"
+              - type: object
+                properties:
+                  data:
+                    type: boolean
+                    example: true 
     ChangePortResponseOK:
       description: OK
       content:

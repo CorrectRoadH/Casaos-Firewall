@@ -19,10 +19,10 @@ GetSysInfo() {
 
 ((EUID)) && sudo_cmd="sudo"
 
-
-
-
-
+GetFirewallState(){
+  $sudo_cmd firewall-cmd --state 
+  # result may be `running` and `not running`
+}
 
 ClosePort(){
   # $1 表示端口号 $2 tcp udp
