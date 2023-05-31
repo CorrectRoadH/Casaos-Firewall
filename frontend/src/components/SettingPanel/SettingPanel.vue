@@ -12,5 +12,6 @@ import CButton from '../kit/CButton.vue'
 <style scoped>
 .version{
     display: flex;
+    flex-wrap: wrap;
 }
 </style>
