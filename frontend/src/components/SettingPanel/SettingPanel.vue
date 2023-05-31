@@ -1,13 +1,16 @@
 <script setup lang="ts">
-import axios from 'axios';
-import { useQuery } from 'vue-query';
-
+import CButton from '../kit/CButton.vue'
 </script>
 <template>
     <main class="backgroundContainer">
-        firewall version: 0.1.0
-        <button>check update</button>
+        <div class="version">        
+            <p>firewall version: 0.1.0</p>
+            <CButton>check update</CButton>
+        </div>
     </main>
 </template>
 <style scoped>
+.version{
+    display: flex;
+}
 </style>
