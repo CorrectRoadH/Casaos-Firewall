@@ -39,7 +39,7 @@ const handelCloseBtnClick = async (port:string,protocol:string)=>{
 </template>
 <style scoped>
 .table{
-    width: 100%;
+    //width: 100%;
     border-collapse: collapse;
     margin: auto;
     margin-top: 20px;
