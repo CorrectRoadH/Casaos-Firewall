@@ -27,3 +27,13 @@ const handelSaveBtnClick = async ()=>{
         <CButton @click="handelSaveBtnClick">Open</CButton>
       </div>
 </template>
+
+<style scoped>
+.input{
+  display: flex;
+  gap:5px;
+}
+input{
+  width: 100px;
+}
+</style>
