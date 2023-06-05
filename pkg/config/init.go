@@ -19,11 +19,6 @@ var (
 		LogFileExt:  "log",
 		ShellPath:   "/usr/share/casaos/shell",
 	}
-
-	ServerInfo = &model.ServerModel{
-		USBAutoMount:   "True",
-		EnableMergerFS: "False",
-	}
 )
 
 var (
@@ -46,13 +41,11 @@ func InitSetup(config string) {
 
 	mapTo("common", CommonInfo)
 	mapTo("app", AppInfo)
-	mapTo("server", ServerInfo)
 }
 
 func SaveSetup(config string) {
 	reflectFrom("common", CommonInfo)
 	reflectFrom("app", AppInfo)
-	reflectFrom("server", ServerInfo)
 
 	configFilePath := FirewallConfigFilePath
 	if len(config) > 0 {
