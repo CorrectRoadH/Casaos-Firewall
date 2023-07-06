@@ -1,0 +1,19 @@
+{
+
+    "name": "icewhale_firewall",
+    "title": {
+        "en_us": "Firewall"
+    },
+    "prefetch": true,
+    "entry": "/modules/icewhale_firewall/index.html",
+    "icon": "/modules/icewhale_firewall/appicon.svg",
+    "description": "Icewhale Firewall Manaager: Manager your firewall",
+    "formality": {
+        "type": "modal",
+        "props": {
+            "fullscreen":true,
+            "hasModalCard": true,
+            "animation": "zoom-in"
+        }
+    }
+}
