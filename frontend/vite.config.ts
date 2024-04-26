@@ -5,6 +5,7 @@ import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/modules/zimaos_firewall/',
   build: {
     outDir: '../raw/usr/share/casaos/www/modules/zimaos_firewall'
   },
