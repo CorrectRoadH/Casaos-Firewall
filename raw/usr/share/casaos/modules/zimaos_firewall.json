@@ -1,0 +1,23 @@
+{
+    "name": "zimaos_firewall",
+    "ui": {
+        "name": "zimaos_firewall",
+        "title": {
+          "en_us": "FireWall"
+        },
+        "prefetch": true,
+        "exec": true,
+        "show": true,
+        "entry": "/modules/zimaos_firewall/index.html",
+        "icon": "/modules/zimaos_firewall/favicon.ico",
+        "description": "FireWall",
+        "formality": {
+          "type": "newtab",
+          "props": {
+            "fullscreen": true,
+            "hasModalCard": true,
+            "animation": "zoom-in"
+          }
+        }
+      }
+}
