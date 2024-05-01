@@ -39,19 +39,7 @@ paths:
           $ref: "#/components/responses/GetStateResponseOK"
         "503":
           $ref: "#/components/responses/ResponseServiceUnavailable"
-  /version:
-    get:
-      summary: Get Version
-      description: |-
-        (TODO)
-      operationId: getVersion
-      tags:
-        - Nftable methods
-      responses:
-        "200":
-          $ref: "#/components/responses/GetVersionResponseOK"
-        "503":
-          $ref: "#/components/responses/ResponseServiceUnavailable"
+
   /port:
     get:
       summary: Get Opened Ports
@@ -65,11 +53,12 @@ paths:
           $ref: "#/components/responses/GetPortsResponseOK"
         "503":
           $ref: "#/components/responses/ResponseServiceUnavailable"
+
     post:
-      summary: Open or Close a Port
+      summary: Open  a Port
       description: |-
         (TODO)
-      operationId: openOrClosePort
+      operationId: openPort
       tags:
         - Firewall methods
       requestBody:
@@ -84,6 +73,22 @@ paths:
           $ref: "#/components/responses/ResponseBadRequest"
         "503":
           $ref: "#/components/responses/ResponseServiceUnavailable"
+    
+    delete:
+      summary: Close a Port 
+      description: |-
+        (TODO)
+      operationId: deletePortRule
+      tags:
+        - Firewall methods
+    
+    put:
+      summary: Update a Port Rule
+      description: |-
+        (TODO)
+      operationId: updatePortRule
+      tags:
+        - Firewall methods
 
 components:
   securitySchemes:
@@ -169,18 +174,25 @@ components:
   schemas:
     Rule:
       type: string
+   
     Port:
       type: object
+      required:
+        - port
+        - protocol
       properties:
         port:
           type: string
           example: "80"
         protocol:
           type: string
-          example: "tcp"
-        action:
+          enum:
+            - "tcp"
+            - "udp"
+        status:
           type: string
           example: "open"
+
     BaseResponse:
       properties:
         message:

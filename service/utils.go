@@ -1,4 +1,4 @@
-package v2
+package service
 
 func (s *FirewallService) checkUpdate() (string, error) {
 	return "", nil

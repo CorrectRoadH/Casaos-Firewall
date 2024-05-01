@@ -1,25 +1,10 @@
 {
-  "name": "Casaos-Firewall",
+  "name": "casaos_firewall",
   "version": "1.0.0",
   "scripts": {
-    "build": "rm -rf dist && tsc && rm -rf generate",
-    "generate:local": "openapi-generator-cli generate -g typescript-axios -i ./api/firewall/openapi.yaml -o ./generate",
-    "generate:npx": "npx @openapitools/openapi-generator-cli generate -g typescript-axios -i ./api/firewall/openapi.yaml -o ./generate",
-    "generate:ts": "npx openapi-typescript-codegen --input ./api/firewall/openapi.yaml --output ./generate",
-    "publish": "npm publish --access public",
-    "start": "yarn generate:ts && yarn build"
-  },
-  "main": "dist/index.js",
-  "repository": "git@github.com:CorrectRoadH/Casaos-Firewall.git",
-  "author": "CorrectRoadH <a778917369@gmail.com>",
-  "license": "MIT",
-  "dependencies": {
-    "axios": "^1.4.0"
+    "generate": "npx openapi-typescript \"api/**/*.yaml\" --output ./frontend/src/types/openapi.ts"
   },
   "devDependencies": {
-    "@openapitools/openapi-generator-cli": "^2.6.0",
-    "@types/node": "^20.2.3",
-    "openapi-typescript-codegen": "^0.24.0",
-    "typescript": "^5.0.4"
+    "openapi-typescript": "^6.7.5"
   }
 }
